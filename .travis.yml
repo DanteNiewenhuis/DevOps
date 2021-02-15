@@ -1,0 +1,38 @@
+sudo: required
+services:
+- docker
+language: python
+python:
+- '3.6'
+before_install:
+- docker version
+- docker info
+install:
+- npm install -lts
+- npm install newman
+- pip install -r requirements.txt
+- pip install -r test-requirements.txt
+- pip install nose
+- pip install Flask-Testing
+before_script:
+- node --version
+- npm --version
+- node_modules/.bin/newman --version
+script:
+- python -m unittest discover
+- docker build -t swagger-spring-example:1.0.0 .
+- docker run --name example_api -d -t -p 127.0.0.1:8080:8080 swagger-spring-example:1.0.0
+- docker ps
+- count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080);
+  do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break;
+  fi; done
+- docker logs example_api
+- node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
+after_success:
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- docker tag devopsdante/swagger_server devopsdante/swagger_server
+- docker push devopsdante/swagger_server
+env:
+  global:
+  - secure: tWgBd+EnfNfBAe6Q+Ujf83eDxPquB7i1RN7A27hE3sBB9w67SCmC5hUwjiYzEmuEuiVVI9xMs6o5AnSk9QmeCMrDH+Ii01GCjvz6pcZPaY84gRXiNz++vRtx0GekH5zU9n3q2FsMiHuAVvqqNAUWpzTnWFzRNajtUZBLMrkXWYFvODirTB0LT8FGAFxtVh3eYccwr+t0oC1aHrloW056aQ/Xm/QxRzSAuQu6GivigmCyn9TWN7wym+IAbuuwvMESc0bXoolLHc1dZFS/S+rzbKonyNRyQfli3/xs4SxkrPtW+gc4eqbk+po1HOOgj16Riluq9N3Qtv99vbprrEXcVQ5gJkUpUmUOwtwbHkcpvrL7uvdjuPismXXAbs9JPiflxQZg9dsFyVEhdvPTp7SHY+6gxvoitoeVCL6MuYO1LI5UbFBP5qigrxgn22rO0FhUREG9c4tGfHnleKt5csD5JAWx59SXuLXcQWuhVrkGFizGEypCIQudPdlZ5E8odMBrpnVfkUoAmUGnZGaeHEwbZ+EA6VQukvne/9eOgbhcqdlVJ8eKx49YdRHX9u1il4GcYqOCc35Suc15gYsdScyOGlTTGrTBoInlML9stBbbHOZrOdBzppOl+svOK89SijpBOkSRKPfQH9Y3S5mfpBUyWF5t+jBuXy8vFwEkTEDut5g=
+  - secure: TmJCz2H0Cjd+8qAJTP59ypz+TsHnYdZvOSXsTtwQsiu8oEkrbDPBx5yKEaOJ4vTnYYC91PtfcNa9x7pwD4FvDYGPd6wPysExegwwZaKHaSEZoS1XYNM/EjFHbETXqEeSK3k/W0F6YIuK5cUd6M3AwTes4YuD3wNd0FP6V91Wv7DPUW1cFU/wrC8cG4qX6NNfCImH+x6oTUN7kC+Mh7MxqdimZuRaeZDHxAq0WZ4CUqn6aDIUFDEmgOUCq71U4GNCALOv+trKA5gq6cxa6h9d3PCMBL45fnYVhKo3l5VfaRP3v9JCDL+4a5+TKUh4axGqcVI3PoXz5cjgTuqE3mdvHoLoh7oujZBnfjT7cNv1kU9Jm1PihOEadPE0jA1AKvfNQ6Aon9ayNR5FPfKN5Jwdzdp6aGVwwYQuhbZC1Ol4haThRzcMcqKuSVzap/gQxnuK7pyuRV4sxwQsKiNLfkjeTgham8BV7e8l5eHtrDH7UP9oc+kKnBRp5QJE6tiaoqumfLVTjdggmoYopEQa4TecvnBfwAI7thhyFDAkvky5Gm/Yub0iuufsBap3edTxrW8MfpKn1xZ8XgJ2p9IL5D9ThSBbmwzMpOlcRxodXtWwRF+NKkffdL6hjOBQD2jXZF4Bl3OjyJTnxHaaiO5VMMF3pCEvRkR/mKtKkN1dAmkixgM=
