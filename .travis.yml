@@ -30,8 +30,8 @@ script:
 - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
 after_success:
 - docker login -u $DOCKER_USER -p $DOCKER_PASS
-- docker tag devopsdante/swagger_server devopsdante/swagger_server
-- docker push devopsdante/swagger_server
+- docker tag swagger-spring-example:1.0.0 danteniewenhuis/devopsdante
+- docker push danteniewenhuis/devopsdante
 env:
   global:
   - secure: tWgBd+EnfNfBAe6Q+Ujf83eDxPquB7i1RN7A27hE3sBB9w67SCmC5hUwjiYzEmuEuiVVI9xMs6o5AnSk9QmeCMrDH+Ii01GCjvz6pcZPaY84gRXiNz++vRtx0GekH5zU9n3q2FsMiHuAVvqqNAUWpzTnWFzRNajtUZBLMrkXWYFvODirTB0LT8FGAFxtVh3eYccwr+t0oC1aHrloW056aQ/Xm/QxRzSAuQu6GivigmCyn9TWN7wym+IAbuuwvMESc0bXoolLHc1dZFS/S+rzbKonyNRyQfli3/xs4SxkrPtW+gc4eqbk+po1HOOgj16Riluq9N3Qtv99vbprrEXcVQ5gJkUpUmUOwtwbHkcpvrL7uvdjuPismXXAbs9JPiflxQZg9dsFyVEhdvPTp7SHY+6gxvoitoeVCL6MuYO1LI5UbFBP5qigrxgn22rO0FhUREG9c4tGfHnleKt5csD5JAWx59SXuLXcQWuhVrkGFizGEypCIQudPdlZ5E8odMBrpnVfkUoAmUGnZGaeHEwbZ+EA6VQukvne/9eOgbhcqdlVJ8eKx49YdRHX9u1il4GcYqOCc35Suc15gYsdScyOGlTTGrTBoInlML9stBbbHOZrOdBzppOl+svOK89SijpBOkSRKPfQH9Y3S5mfpBUyWF5t+jBuXy8vFwEkTEDut5g=
