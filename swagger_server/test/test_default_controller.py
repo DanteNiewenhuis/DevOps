@@ -21,7 +21,7 @@ class TestDefaultController(BaseTestCase):
         body.last_name = names.get_last_name()
         body.grades = {'math': 8, 'history': 9}
         response = self.client.open(
-            '/service-api/student',
+            '/service-api/student/',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -38,7 +38,7 @@ class TestDefaultController(BaseTestCase):
         body.last_name = names.get_last_name()
         body.grades = {'math': 8, 'history': 9}
         response = self.client.open(
-            '/service-api/student',
+            '/service-api/student/',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -65,7 +65,7 @@ class TestDefaultController(BaseTestCase):
         body.last_name = names.get_last_name()
         body.grades = {'math': 8, 'history': 9}
         response = self.client.open(
-            '/service-api/student',
+            '/service-api/student/',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')

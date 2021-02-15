@@ -19,7 +19,7 @@ before_script:
 - npm --version
 - node_modules/.bin/newman --version
 script:
-# - python -m unittest discover
+- python -m unittest discover
 - docker build -t swagger-spring-example:1.0.0 .
 - docker run --name example_api -d -t -p 127.0.0.1:8080:8080 swagger-spring-example:1.0.0
 - docker ps
